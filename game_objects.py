@@ -6,20 +6,16 @@ from settings import *
 class Player(pygame.sprite.Sprite):
     def __init__(self, color, x, y):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((30, 30))
+        self.image = pygame.Surface((64, 64))
         self.image.fill(color)
-        self.original_image = self.image
         self.x, self.y = x, y
         self.rect = self.image.get_rect()
-        self.rect.centerx = self.x
-        self.rect.centery = self.y
-        self.speedy = 0
-        self.speedx = 0
+        self.rect.centerx, self.rect.centery = self.x, self.y
+        self.speedy, self.speedx = 0, 0 
 
     def update(self):
         self.rotate()
-        self.speedy = 0
-        self.speedx = 0 
+        self.speedy, self.speedx = 0, 0 
         keystate = pygame.key.get_pressed() 
         if keystate[pygame.K_w] or keystate[pygame.K_UP]:
             self.speedy = -10
@@ -41,10 +37,6 @@ class Player(pygame.sprite.Sprite):
         elif self.rect.right > width:
            self.rect.right = width 
 
-        
-    def rotate(self):
-        mouse_x, mouse_y = pygame.mouse.get_pos()
-        rel_x, rel_y = mouse_x - self.x, mouse_y - self.y
-        angle = (180 / math.pi) * -math.atan2(rel_y, rel_x)
-        self.image = pygame.transform.rotate(self.original_image, int(angle))
-        self.rect = self.image.get_rect(center=self.position)
+
+class Wall:
+    pass        
