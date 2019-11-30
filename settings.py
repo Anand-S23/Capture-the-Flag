@@ -1,8 +1,8 @@
 import pygame
 
 # basic variable
-width = 1200
-height = 900
+width = 1280
+height = 720
 fps = 30
 
 # colors

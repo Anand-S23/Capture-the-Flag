@@ -3,7 +3,7 @@ import random
 import math
 import time
 from os import path
-from player import Player
+from game_objects import *  
 from settings import *
 
 # initalize pygame and create window 
