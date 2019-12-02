@@ -4,8 +4,10 @@ import math
 from settings import *
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, color, x, y):
-        pygame.sprite.Sprite.__init__(self)
+    def __init__(self, game, color, x, y):
+        self.groups = game.all_sprites
+        pygame.sprite.Sprite.__init__(self, self.groups)
+        self.game = gamepygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((64, 64))
         self.image.fill(color)
         self.x, self.y = x, y
