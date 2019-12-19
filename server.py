@@ -10,7 +10,7 @@ while True:
     (cli_socket, addr) = s.accept()
     with cli_socket:
         print(addr, 'has conneted to the server.')
-        while True:
+        while True:   
             data = cli_socket.recv(1024)
             if not data:
                 break
