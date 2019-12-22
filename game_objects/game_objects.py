@@ -32,12 +32,12 @@ class Player(pygame.sprite.Sprite):
 
         if self.rect.top < 0:
             self.rect.top = 0
-        elif self.rect.bottom > height:
-            self.rect.bottom = height 
+        elif self.rect.bottom > HEIGHT:
+            self.rect.bottom = HEIGHT 
         if self.rect.left < 0:
             self.rect.left = 0
-        elif self.rect.right > width:
-           self.rect.right = width 
+        elif self.rect.right > WIDTH:
+           self.rect.right = WIDTH 
 
 
 class Wall:
