@@ -6,7 +6,7 @@ import sys
 from os import path
 from game_objects import *  
 from settings import *
-import time
+import datetime
 
 '''
 class Game:
@@ -76,18 +76,10 @@ class RedPlayer(pygame.sprite.Sprite):
         self.rect.centerx = 120
         self.rect.centery = HEIGHT / 2
         self.speedy = 0
-        self.moving = True
 
     def reset(self):
         self.rect.centerx = 120
         self.rect.centery = HEIGHT / 2
-        start = time.time()
-        self.moving = False
-        while self.moving == False:
-            time_diff = time.time()
-            if time_diff > 5000:
-                self.moving = True
-
 
     def update(self):
         self.speedy = 0
@@ -101,10 +93,9 @@ class RedPlayer(pygame.sprite.Sprite):
             self.speedx = -7
         if keystate[pygame.K_d]:
             self.speedx = 7
-        
-        if self.moving: 
-            self.rect.y += self.speedy
-            self.rect.x += self.speedx
+                
+        self.rect.y += self.speedy
+        self.rect.x += self.speedx
 
         if self.rect.top < 0:
             self.rect.top = 0
@@ -124,17 +115,10 @@ class BluePLayer(pygame.sprite.Sprite):
         self.rect.centerx = WIDTH - 120
         self.rect.centery = HEIGHT / 2
         self.speedy = 0
-        self.moving = True
 
     def reset(self):
         self.rect.centerx = WIDTH - 120
         self.rect.centery = HEIGHT / 2
-        start = time.time()
-        self.moving = False
-        while self.moving == False:
-            time_diff = time.time()
-            if time_diff > 5000000000000:
-                self.moving = True
 
     def update(self):
         self.speedy = 0
@@ -149,9 +133,9 @@ class BluePLayer(pygame.sprite.Sprite):
         if keystate[pygame.K_LEFT]:
             self.speedx = -7
         
-        if self.moving:
-            self.rect.y += self.speedy
-            self.rect.x += self.speedx
+        
+        self.rect.y += self.speedy
+        self.rect.x += self.speedx
 
         if self.rect.top < 0:
             self.rect.top = 0
@@ -185,14 +169,12 @@ while running:
 
     if hit:
         if player_left.rect.x < WIDTH / 2 and player_right.rect.x < WIDTH / 2:
-            player_right.moving = False
             player_right.reset()
-            print(player_right.moving)
+            
         elif player_left.rect.x > WIDTH / 2 and player_right.rect.x > WIDTH / 2:
-            player_left.moving = False
             player_left.reset()
-            print(player_left.moving)
 
+            
     # Process input (events)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
