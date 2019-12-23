@@ -146,15 +146,26 @@ class BluePLayer(pygame.sprite.Sprite):
         if self.rect.left < 0:
             self.rect.left = 0
 
+class Wall(pygame.sprite.Sprite):
+    def __init__(self, x, y, height, width):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.Surface((height, width))
+        self.image.fill(GREEN)
+        self.rect = self.image.get_rect()
+        self.rect.centerx = x
+        self.rect.centery = y
 
 right = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
+walls = pygame.sprite.Group()
 
 player_left = RedPlayer()
 player_right = BluePLayer()
+wall1 = Wall(100, 100, 60, 30)
 
 right.add(player_right)
-all_sprites.add(player_left, player_right)
+all_sprites.add(player_left, player_right, wall1)
+walls.add(wall1)
 
 sp1 = 0
 sp2 = 0
