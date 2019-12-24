@@ -15,3 +15,6 @@ DARK_GRAY = pygame.Color(100, 100, 100)
 RED = pygame.Color(155, 0, 0)
 GREEN = pygame.Color(0, 255, 0)
 BLUE = pygame.Color(0, 0, 255)
+
+# Player settings
+PLAYER_SPEED = 10

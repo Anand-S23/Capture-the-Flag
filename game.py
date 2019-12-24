@@ -1,12 +1,10 @@
 import pygame 
 import random
 import math
-import time
 import sys
 from os import path
 from game_objects import *  
 from settings import *
-import datetime
 
 img_dir = path.join(path.dirname(__file__), 'graphics')
 
@@ -20,6 +18,145 @@ clock = pygame.time.Clock()
 right = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
 walls = pygame.sprite.Group()
+
+class RedPlayer(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.Surface((32, 32))
+        self.image.fill(RED)
+        self.rect = self.image.get_rect()
+        self.x = 120
+        self.y = HEIGHT / 2
+        self.vx, self.vy = 0, 0
+
+    def reset(self):
+        self.x = 120
+        self.y = HEIGHT / 2
+
+    def get_keys(self):
+        self.vx, self.vy = 0, 0
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_a]:
+            self.vx = -PLAYER_SPEED
+        if keys[pygame.K_d]:
+            self.vx = PLAYER_SPEED
+        if keys[pygame.K_w]:
+            self.vy = -PLAYER_SPEED
+        if keys[pygame.K_s]:
+            self.vy = PLAYER_SPEED
+
+    def collide_with_walls(self, dir):
+        if dir == 'x':
+            hits = pygame.sprite.spritecollide(self, walls, False)
+            if hits:
+                if self.vx > 0:
+                    self.x = hits[0].rect.left - self.rect.width
+                if self.vx < 0:
+                    self.x = hits[0].rect.right
+                self.vx = 0
+                self.rect.x = self.x
+        if dir == 'y':
+            hits = pygame.sprite.spritecollide(self, walls, False)
+            if hits:
+                if self.vy > 0:
+                    self.y = hits[0].rect.top - self.rect.height
+                if self.vy < 0:
+                    self.y = hits[0].rect.bottom
+                self.vy = 0
+                self.rect.y = self.y
+
+    def update(self):
+        self.get_keys()
+        self.x += self.vx 
+        self.y += self.vy 
+        self.rect.x = self.x
+        self.collide_with_walls('x')
+        self.rect.y = self.y
+        self.collide_with_walls('y')
+
+        if self.rect.top < 0:
+            self.rect.top = 0
+        if self.rect.bottom > HEIGHT:
+            self.rect.bottom = HEIGHT
+        if self.rect.right > WIDTH:
+            self.rect.right = WIDTH
+        if self.rect.left < 0:
+            self.rect.left = 0
+
+class BluePLayer(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.Surface((32, 32))
+        self.image.fill(BLUE)
+        self.rect = self.image.get_rect()
+        self.x = WIDTH - 120
+        self.y = HEIGHT / 2
+        self.vx, self.vy = 0, 0
+
+    def reset(self):
+        self.x = WIDTH - 120
+        self.y = HEIGHT / 2
+
+    def get_keys(self):
+        self.vx, self.vy = 0, 0
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT]:
+            self.vx = -PLAYER_SPEED
+        if keys[pygame.K_RIGHT]:
+            self.vx = PLAYER_SPEED
+        if keys[pygame.K_UP]:
+            self.vy = -PLAYER_SPEED
+        if keys[pygame.K_DOWN]:
+            self.vy = PLAYER_SPEED
+
+    def collide_with_walls(self, dir):
+        if dir == 'x':
+            hits = pygame.sprite.spritecollide(self, walls, False)
+            if hits:
+                if self.vx > 0:
+                    self.x = hits[0].rect.left - self.rect.width
+                if self.vx < 0:
+                    self.x = hits[0].rect.right
+                self.vx = 0
+                self.rect.x = self.x
+        if dir == 'y':
+            hits = pygame.sprite.spritecollide(self, walls, False)
+            if hits:
+                if self.vy > 0:
+                    self.y = hits[0].rect.top - self.rect.height
+                if self.vy < 0:
+                    self.y = hits[0].rect.bottom
+                self.vy = 0
+                self.rect.y = self.y
+
+    def update(self):
+        self.get_keys()
+        self.x += self.vx 
+        self.y += self.vy 
+        self.rect.x = self.x
+        self.collide_with_walls('x')
+        self.rect.y = self.y
+        self.collide_with_walls('y')
+
+        if self.rect.top < 0:
+            self.rect.top = 0
+        if self.rect.bottom > HEIGHT:
+            self.rect.bottom = HEIGHT
+        if self.rect.right > WIDTH:
+            self.rect.right = WIDTH
+        if self.rect.left < 0:
+            self.rect.left = 0
+
+class Wall(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.Surface((32, 32))
+        self.image.fill(GREEN)
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        self.rect.x = x * 32
+        self.rect.y = y * 32
 
 player_left = RedPlayer()
 player_right = BluePLayer()
@@ -54,10 +191,12 @@ while running:
 
     if hit:
         if player_left.rect.x < WIDTH / 2 and player_right.rect.x < WIDTH / 2:
-            player_right.reset()
+            if not (player_right.rect.x < 67): 
+                player_right.reset()
             
         elif player_left.rect.x > WIDTH / 2 and player_right.rect.x > WIDTH / 2:
-            player_left.reset()
+            if not (player_right.rect.x > WIDTH - 67): 
+                player_left.reset()
 
             
     # Process input (events)
