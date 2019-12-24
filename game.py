@@ -23,11 +23,23 @@ walls = pygame.sprite.Group()
 
 player_left = RedPlayer()
 player_right = BluePLayer()
-wall1 = Wall(100, 100, 60, 30)
 
 right.add(player_right)
-all_sprites.add(player_left, player_right, wall1)
-walls.add(wall1)
+all_sprites.add(player_left, player_right)
+
+game_folder = path.dirname(__file__)
+map_data = []
+with open(path.join(game_folder, 'map.txt'), 'rt') as f:
+    for line in f:
+        map_data.append(line)
+
+for row, tiles in enumerate(map_data):
+    for col, tile in enumerate(tiles):
+        if tile == '1':
+            wall = Wall(col, row)
+            walls.add(wall)
+            all_sprites.add(wall)
+
 
 background = pygame.image.load(path.join(img_dir, 'background.png')).convert()
 background_rect = background.get_rect()

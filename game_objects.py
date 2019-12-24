@@ -82,11 +82,22 @@ class BluePLayer(pygame.sprite.Sprite):
         if self.rect.left < 0:
             self.rect.left = 0
 
-class Wall(pygame.sprite.Sprite):
+'''class Wall(pygame.sprite.Sprite):
     def __init__(self, x, y, height, width):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((height, width))
         self.image.fill(GREEN)
         self.rect = self.image.get_rect()
         self.rect.centerx = x
-        self.rect.centery = y
+        self.rect.centery = y'''
+
+class Wall(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.Surface((32, 32))
+        self.image.fill(GREEN)
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        self.rect.x = x * 32
+        self.rect.y = y * 32
