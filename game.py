@@ -3,7 +3,7 @@ import random
 import math
 import sys
 from os import path
-from game_objects import *  
+#from game_objects import *  
 from settings import *
 
 img_dir = path.join(path.dirname(__file__), 'graphics')
@@ -191,11 +191,11 @@ while running:
 
     if hit:
         if player_left.rect.x < WIDTH / 2 and player_right.rect.x < WIDTH / 2:
-            if not (player_right.rect.x < 67): 
+            if not (player_right.rect.x < 50): 
                 player_right.reset()
             
         elif player_left.rect.x > WIDTH / 2 and player_right.rect.x > WIDTH / 2:
-            if not (player_right.rect.x > WIDTH - 67): 
+            if not (player_left.rect.x > WIDTH - 72): 
                 player_left.reset()
 
             
