@@ -142,6 +142,9 @@ right.add(flag_right)
 left.add(flag_left)
 all_sprites.add(player_left, player_right, flag_left, flag_right)
 
+def add_flag(flag):
+    all_sprites.add(flag)
+
 game_folder = path.dirname(__file__)
 map_data = []
 with open(path.join(game_folder, 'map.txt'), 'rt') as f:
@@ -166,33 +169,27 @@ while running:
     clock.tick(FPS)
 
     hit = pygame.sprite.collide_rect(player_left, player_right)
-    left_picked = pygame.sprite.spritecollide(player_right, left, True)
-    right_picked = pygame.sprite.spritecollide(player_left, right, True)
+    left_picked = pygame.sprite.spritecollide(player_right, left, False)
+    right_picked = pygame.sprite.spritecollide(player_left, right, False)
 
     if hit:
         if player_left.rect.x < WIDTH / 2 and player_right.rect.x < WIDTH / 2:
             if not (player_right.rect.x < 50): 
                 if player_right.flag_picked == True:
-                    flag_left = Flag(68, HEIGHT / 2)
-                    left.add(flag_left)
-                    all_sprites.add(flag_left)
+                    add_flag(flag_left)
                 player_right.reset()
             
         elif player_left.rect.x > WIDTH / 2 and player_right.rect.x > WIDTH / 2:
             if not (player_left.rect.x > WIDTH - 72): 
                 if player_left.flag_picked == True:
-                    flag_right = Flag(WIDTH - 100, HEIGHT / 2)
-                    right.add(flag_right)
-                    all_sprites.add(flag_right)
+                    add_flag(flag_right)
                 player_left.reset()
                 
     if right_picked:
         all_sprites.remove(flag_right)
-        right.remove(flag_right) 
     
     if left_picked: 
         all_sprites.remove(flag_left)
-        left.remove(flag_left)
 
     # Process input (events)
     for event in pygame.event.get():
