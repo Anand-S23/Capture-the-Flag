@@ -90,20 +90,6 @@ class Player(pygame.sprite.Sprite):
         self.rect.y = self.y
         self.collide_with_walls('y')
 
-        if self.flag_picked == True:
-            if self.side == 'right' and self.rect.x > WIDTH - 96:
-                self.flag_picked = False
-                flag_left = Flag(68, HEIGHT / 2)
-                left.add(flag_left)
-                all_sprites.add(flag_left)
-                self.score += 1
-            if self.side == 'left' and self.rect.x < 64:
-                self.flag_picked = False
-                flag_right = Flag(WIDTH - 100, HEIGHT / 2)
-                right.add(flag_right)
-                all_sprites.add(flag_right)
-                self.score += 1
-
         if self.rect.top < 0:
             self.rect.top = 0
         if self.rect.bottom > HEIGHT:
@@ -133,6 +119,15 @@ class Flag(pygame.sprite.Sprite):
         self.rect.x = x 
         self.rect.y = y
 
+    def hide(self):
+        self.rect.x = -64
+    
+    def show(self, flag):
+        if flag == 'left':
+            self.rect.x = 68
+        if flag == 'right':
+            self.rect.x = WIDTH - 100
+
 player_left = Player(120, HEIGHT / 2, RED, 'left')
 player_right = Player(WIDTH - 152, HEIGHT / 2, BLUE, 'right')
 flag_left = Flag(68, HEIGHT / 2)
@@ -140,10 +135,7 @@ flag_right = Flag(WIDTH - 100, HEIGHT / 2)
 
 right.add(flag_right)
 left.add(flag_left)
-all_sprites.add(player_left, player_right, flag_left, flag_right)
-
-def add_flag(flag):
-    all_sprites.add(flag)
+all_sprites.add(flag_left, flag_right, player_left, player_right)
 
 game_folder = path.dirname(__file__)
 map_data = []
@@ -176,20 +168,34 @@ while running:
         if player_left.rect.x < WIDTH / 2 and player_right.rect.x < WIDTH / 2:
             if not (player_right.rect.x < 50): 
                 if player_right.flag_picked == True:
-                    add_flag(flag_left)
+                    player_right.flag_picked = False
+                    flag_left.show('left')
                 player_right.reset()
             
         elif player_left.rect.x > WIDTH / 2 and player_right.rect.x > WIDTH / 2:
             if not (player_left.rect.x > WIDTH - 72): 
                 if player_left.flag_picked == True:
-                    add_flag(flag_right)
+                    player_left.flag_picked = False
+                    flag_right.show('right')
                 player_left.reset()
                 
     if right_picked:
-        all_sprites.remove(flag_right)
+        flag_right.hide()
+        player_left.flag_picked = True
     
     if left_picked: 
-        all_sprites.remove(flag_left)
+        flag_left.hide()
+        player_right.flag_picked = True
+
+    if player_left.flag_picked == True and player_left.rect.x < 64:
+            player_left.flag_picked = False
+            flag_right.show('right')
+            player_left.score += 1
+
+    if player_right.flag_picked == True and player_right.rect.x > WIDTH - 100:
+            player_right.flag_picked = False
+            flag_left.show('left')
+            player_right.score += 1
 
     # Process input (events)
     for event in pygame.event.get():
