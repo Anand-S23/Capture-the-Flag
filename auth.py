@@ -1,65 +1,44 @@
-import bcrypt 
-from getpass import getpass
 import sqlite3
-from sqlite3 import Error
- 
-def sql_connection():
-    try:
-        con = sqlite3.connect(':memory:')
-        print('Database created')
- 
-    except Error:
-        print(Error)
+import bcrypt
 
-def sql_table(con):
-    cursorObj = con.cursor()
-    cursorObj.execute("CREATE TABLE users(username text, password text)")
-    con.commit()
+db = sqlite3.connect('auth.db')
+cursor = db.cursor()
+cursor.execute('CREATE TABLE users (username TEXT PRIMARY KEY, password TEXT)')
+db.commit()
 
+def create_user(username, password, password_conf):
+  cursor.execute("""SELECT username FROM users WHERE username=?""", (username))
+  exisiting_user = cursor.fetchone()
 
-con = sql_connection()
-sql_table(con)
- 
+  if exisiting_user: 
+    print('User already exisits, login or choose another username.')
 
-def create_user():
-    username = input('Username: ')
-    pass1 = getpass()
-    pass2 = getpass()
+  else:
+    if password == password_conf: 
+      encoded = password.encode('utf-8')
+      final_password = bcrypt.hashpw(password, bcrypt.gensalt())
 
-    cur = g.db.cursor()
-    cur.execute("""SELECT username FROM users WHERE username=?""", (username))
+      cursor.execute("INSERT INTO users VALUES (?, ?)", (username, hpass))
+      db.commit()
 
-    result = cur.fetchone()
+    else: 
+      print('Passwords did not match. ')
 
-    if result:
-        print('User already exits. ')
-    
+def authenticate_user(username, password):
+  cursor.execute("""SELECT username, password FROM users WHERE username=?""", (username))
+  user = cursor.fetchone()
 
+  if user: 
+    encoded_pass = user[1].encode('utf-8')
+    if bcrypt.checkpw(encoded_pass, password):
+      print('You have logged on.')
     else:
-        if pass1 == pass2:
-            password = pass1.encode('utf-8')
-            hpass = bcrypt.hashpw(password, bcrypt.gensalt())
+      print('Passwords don\'t match.')
+  else:
+    print('User not found.')
 
-            cur.execute("INSERT INTO users VALUES (?, ?)", (username, hpass))
-            g.db.commit()
 
-        else: 
-            print('Passwords did not match. ')
-    
+  
 
-def authenticate():
-    username = input('Username: ')
-    password = getpass()
 
-    found = False
 
-    # Get passowrd here
-        
-    if found: 
-        npass = password.encode('utf-8')
-        if bcrypt.checkpw(npass, all_users[location]['password']):
-            print('You have logged on.')
-        else:
-            print('Passwords don\'t match.')
-    else:
-        print('User not found.')
