@@ -129,16 +129,32 @@ class Flag(pygame.sprite.Sprite):
             self.rect.x = WIDTH - 100
 
 def start_menu():
-    pass
+    running = True 
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
 
 def login_screen():
-    pass 
+    running = True 
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False 
 
 def register_screen():
-    pass
+    running = True 
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
 
 def account():
-    pass
+    running = True 
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = Falses
 
 def game():
     player_left = Player(120, HEIGHT / 2, RED, 'left')
