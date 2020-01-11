@@ -128,87 +128,101 @@ class Flag(pygame.sprite.Sprite):
         if flag == 'right':
             self.rect.x = WIDTH - 100
 
-player_left = Player(120, HEIGHT / 2, RED, 'left')
-player_right = Player(WIDTH - 152, HEIGHT / 2, BLUE, 'right')
-flag_left = Flag(68, HEIGHT / 2)
-flag_right = Flag(WIDTH - 100, HEIGHT / 2)
+def start_menu():
+    pass
 
-right.add(flag_right)
-left.add(flag_left)
-all_sprites.add(flag_left, flag_right, player_left, player_right)
+def login_screen():
+    pass 
 
-game_folder = path.dirname(__file__)
-map_data = []
-with open(path.join(game_folder, 'map.txt'), 'rt') as f:
-    for line in f:
-        map_data.append(line)
+def register_screen():
+    pass
 
-for row, tiles in enumerate(map_data):
-    for col, tile in enumerate(tiles):
-        if tile == '1':
-            wall = Wall(col, row)
-            walls.add(wall)
-            all_sprites.add(wall)
+def account():
+    pass
+
+def game():
+    player_left = Player(120, HEIGHT / 2, RED, 'left')
+    player_right = Player(WIDTH - 152, HEIGHT / 2, BLUE, 'right')
+    flag_left = Flag(68, HEIGHT / 2)
+    flag_right = Flag(WIDTH - 100, HEIGHT / 2)
+
+    right.add(flag_right)
+    left.add(flag_left)
+    all_sprites.add(flag_left, flag_right, player_left, player_right)
+
+    game_folder = path.dirname(__file__)
+    map_data = []
+    with open(path.join(game_folder, 'map.txt'), 'rt') as f:
+        for line in f:
+            map_data.append(line)
+
+    for row, tiles in enumerate(map_data):
+        for col, tile in enumerate(tiles):
+            if tile == '1':
+                wall = Wall(col, row)
+                walls.add(wall)
+                all_sprites.add(wall)
 
 
-background = pygame.image.load(path.join(img_dir, 'background.png')).convert()
-background_rect = background.get_rect()
+    background = pygame.image.load(path.join(img_dir, 'background.png')).convert()
+    background_rect = background.get_rect()
 
-# Game loop 
-running = True 
-while running:
-    # Setting the FPS 
-    clock.tick(FPS)
+    # Game loop 
+    running = True 
+    while running:
+        # Setting the FPS 
+        clock.tick(FPS)
 
-    hit = pygame.sprite.collide_rect(player_left, player_right)
-    left_picked = pygame.sprite.spritecollide(player_right, left, False)
-    right_picked = pygame.sprite.spritecollide(player_left, right, False)
+        hit = pygame.sprite.collide_rect(player_left, player_right)
+        left_picked = pygame.sprite.spritecollide(player_right, left, False)
+        right_picked = pygame.sprite.spritecollide(player_left, right, False)
 
-    if hit:
-        if player_left.rect.x < WIDTH / 2 and player_right.rect.x < WIDTH / 2:
-            if not (player_right.rect.x < 50): 
-                if player_right.flag_picked == True:
-                    player_right.flag_picked = False
-                    flag_left.show('left')
-                player_right.reset()
-            
-        elif player_left.rect.x > WIDTH / 2 and player_right.rect.x > WIDTH / 2:
-            if not (player_left.rect.x > WIDTH - 72): 
-                if player_left.flag_picked == True:
-                    player_left.flag_picked = False
-                    flag_right.show('right')
-                player_left.reset()
+        if hit:
+            if player_left.rect.x < WIDTH / 2 and player_right.rect.x < WIDTH / 2:
+                if not (player_right.rect.x < 50): 
+                    if player_right.flag_picked == True:
+                        player_right.flag_picked = False
+                        flag_left.show('left')
+                    player_right.reset()
                 
-    if right_picked:
-        flag_right.hide()
-        player_left.flag_picked = True
-    
-    if left_picked: 
-        flag_left.hide()
-        player_right.flag_picked = True
-
-    if player_left.flag_picked == True and player_left.rect.x < 64:
-            player_left.flag_picked = False
-            flag_right.show('right')
-            player_left.score += 1
-
-    if player_right.flag_picked == True and player_right.rect.x > WIDTH - 100:
-            player_right.flag_picked = False
-            flag_left.show('left')
-            player_right.score += 1
-
-    # Process input (events)
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-    
-    # Update 
-    all_sprites.update()
+            elif player_left.rect.x > WIDTH / 2 and player_right.rect.x > WIDTH / 2:
+                if not (player_left.rect.x > WIDTH - 72): 
+                    if player_left.flag_picked == True:
+                        player_left.flag_picked = False
+                        flag_right.show('right')
+                    player_left.reset()
+                    
+        if right_picked:
+            flag_right.hide()
+            player_left.flag_picked = True
         
-    # Draw / Render
-    screen.fill(BLACK)
-    screen.blit(background, background_rect)
-    all_sprites.draw(screen)
-    pygame.display.flip()
+        if left_picked: 
+            flag_left.hide()
+            player_right.flag_picked = True
 
+        if player_left.flag_picked == True and player_left.rect.x < 64:
+                player_left.flag_picked = False
+                flag_right.show('right')
+                player_left.score += 1
+
+        if player_right.flag_picked == True and player_right.rect.x > WIDTH - 100:
+                player_right.flag_picked = False
+                flag_left.show('left')
+                player_right.score += 1
+
+        # Process input (events)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+        
+        # Update 
+        all_sprites.update()
+            
+        # Draw / Render
+        screen.fill(BLACK)
+        screen.blit(background, background_rect)
+        all_sprites.draw(screen)
+        pygame.display.flip()
+
+game()
 pygame.quit()

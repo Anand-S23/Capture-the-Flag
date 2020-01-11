@@ -3,8 +3,10 @@ import bcrypt
 
 db = sqlite3.connect('auth.db')
 cursor = db.cursor()
-#cursor.execute('CREATE TABLE users (username TEXT PRIMARY KEY, password TEXT)')
-#db.commit()
+
+# Only need to this to excute the first time (when there is no table)
+# cursor.execute('CREATE TABLE users (username TEXT PRIMARY KEY, password TEXT)')
+# db.commit()
 
 def create_user(username, password, password_conf):
   cursor.execute("""SELECT username FROM users WHERE username=?""", (username,))
@@ -36,9 +38,3 @@ def authenticate_user(username, password):
       print('Passwords don\'t match.')
   else:
     print('User not found.')
-
-
-  
-authenticate_user('hi', 'hi')
-
-
