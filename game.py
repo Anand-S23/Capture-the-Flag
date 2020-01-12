@@ -156,6 +156,21 @@ def account():
             if event.type == pygame.QUIT:
                 running = Falses
 
+def load_map(file):
+    game_folder = path.dirname(__file__)
+    map_data = []
+    with open(path.join(game_folder, "maps/map.txt"), 'rt') as f:
+        for line in f:
+            map_data.append(line)
+
+    for row, tiles in enumerate(map_data):
+        for col, tile in enumerate(tiles):
+            if tile == '1':
+                wall = Wall(col, row)
+                walls.add(wall)
+                all_sprites.add(wall)
+
+
 def game():
     player_left = Player(120, HEIGHT / 2, RED, 'left')
     player_right = Player(WIDTH - 152, HEIGHT / 2, BLUE, 'right')
@@ -166,9 +181,9 @@ def game():
     left.add(flag_left)
     all_sprites.add(flag_left, flag_right, player_left, player_right)
 
-    game_folder = path.dirname(__file__)
+    '''game_folder = path.dirname(__file__)
     map_data = []
-    with open(path.join(game_folder, 'map.txt'), 'rt') as f:
+    with open(path.join(game_folder, "maps/map.txt"), 'rt') as f:
         for line in f:
             map_data.append(line)
 
@@ -177,7 +192,9 @@ def game():
             if tile == '1':
                 wall = Wall(col, row)
                 walls.add(wall)
-                all_sprites.add(wall)
+                all_sprites.add(wall)'''
+
+    load_map('maps/map.txt')
 
 
     background = pygame.image.load(path.join(img_dir, 'background.png')).convert()
