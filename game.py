@@ -181,22 +181,8 @@ def game():
     left.add(flag_left)
     all_sprites.add(flag_left, flag_right, player_left, player_right)
 
-    '''game_folder = path.dirname(__file__)
-    map_data = []
-    with open(path.join(game_folder, "maps/map.txt"), 'rt') as f:
-        for line in f:
-            map_data.append(line)
-
-    for row, tiles in enumerate(map_data):
-        for col, tile in enumerate(tiles):
-            if tile == '1':
-                wall = Wall(col, row)
-                walls.add(wall)
-                all_sprites.add(wall)'''
-
     load_map('maps/map.txt')
-
-
+    
     background = pygame.image.load(path.join(img_dir, 'background.png')).convert()
     background_rect = background.get_rect()
 

@@ -6,6 +6,7 @@ cursor = db.cursor()
 
 # Only need to this to excute the first time (when there is no table)
 # cursor.execute('CREATE TABLE users (username TEXT PRIMARY KEY, password TEXT)')
+# cursor.execute('CREATE TABLE data (username TEXT PRIMARY KEY, wins INTEGER, losses INTEGER)')
 # db.commit()
 
 def create_user(username, password, password_conf):
@@ -21,6 +22,7 @@ def create_user(username, password, password_conf):
       final_password = bcrypt.hashpw(encoded, bcrypt.gensalt())
 
       cursor.execute("INSERT INTO users VALUES (?, ?)", (username, final_password))
+      cursor.execute("INSERT INTO data VALUES (?, ?, ?)", (username, 0, 0)) # zero wins and losses for new player
       db.commit()
 
     else: 
